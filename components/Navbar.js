@@ -6,7 +6,7 @@ import { Icon } from 'react-native-elements';
 
 import Home from '../views/Home';
 import Products from '../views/Products';
-import Camera from '../views/Camera';
+import Camera from '../views/BarcodeScanner';
 import Recepies from '../views/Recepies';
 
 
@@ -16,12 +16,12 @@ const TabNavigator = createMaterialBottomTabNavigator(
             screen:Home,
             navigationOptions:{
                 tabBarLabel:'Home',
-                activeColor:'#ff0000',
-                inactiveColor:'#000000',
-                barStyle:{backgroundColor:'#67baf6'},
+                activeColor:'#ffffff',
+                inactiveColor:'#ffffff',
+                barStyle:{backgroundColor:'rgba(0,0,0,0.15)'},
                 tabBarIcon:()=>(
                     <View>
-                        <Icon name={'home'} size={30} color={'white'}/>
+                        <Icon name={'home'} size={25} color={'white'}/>
                     </View>
                 )
             }
@@ -31,12 +31,12 @@ const TabNavigator = createMaterialBottomTabNavigator(
             screen:Camera,
             navigationOptions:{
                 tabBarLabel:'Camera',
-                activeColor:'#ff0000',
-                inactiveColor:'#000000',
-                barStyle:{backgroundColor:'#67baf6'},
+                activeColor:'#ffffff',
+                inactiveColor:'#ffffff',
+                barStyle:{backgroundColor:'rgba(0,0,0,0.15)'},
                 tabBarIcon:()=>(
                     <View>
-                        <Icon name={'photo-camera'}  color={'white'} size={30}/>
+                        <Icon name={'photo-camera'}  color={'white'} size={25}/>
                     </View>
                 )
             }
@@ -46,12 +46,12 @@ const TabNavigator = createMaterialBottomTabNavigator(
             screen:Products,
             navigationOptions:{
                 tabBarLabel:'Products',
-                activeColor:'#ff0000',
-                inactiveColor:'#000000',
-                barStyle:{backgroundColor:'#67baf6'},
+                activeColor:'#ffffff',
+                inactiveColor:'#ffffff',
+                barStyle:{backgroundColor:'rgba(0,0,0,0.15)'},
                 tabBarIcon:()=>(
                     <View>
-                        <Icon name={'shopping-cart'} color={'white'} size={30}/>
+                        <Icon name={'shopping-cart'} color={'white'} size={25}/>
                     </View>
                 )
             }
@@ -61,12 +61,12 @@ const TabNavigator = createMaterialBottomTabNavigator(
             screen:Recepies,
             navigationOptions:{
                 tabBarLabel:'Recepies',
-                activeColor:'#ff0000',
-                inactiveColor:'#000000',
-                barStyle:{backgroundColor:'#67baf6'},
+                activeColor:'#ffffff',
+                inactiveColor:'#ffffff',
+                barStyle:{backgroundColor:'rgba(0,0,0,0.15)'},
                 tabBarIcon:()=>(
                     <View>
-                        <Icon name={'event-note'} size={30} color={'white'}/>
+                        <Icon name={'event-note'} size={25} color={'white'}/>
                     </View>
                 )
             }
@@ -75,18 +75,3 @@ const TabNavigator = createMaterialBottomTabNavigator(
 );
 
 export default createAppContainer(TabNavigator);  
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    icon:{
-        borderColor:'#000000',
-        borderStyle:'solid',
-        borderWidth: 2,
-        borderRadius: 1,
-    }
-  });
