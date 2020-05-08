@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {Text,StyleSheet} from 'react-native';
 import { Card, Button, Icon } from 'react-native-elements'
 
+
 export default class RecepieCard extends Component {
 
     render() {
@@ -16,7 +17,8 @@ export default class RecepieCard extends Component {
                 </Text>
                 <Button icon={<Icon name='restaurant' color='#ffffff' />} 
                     buttonStyle={{ borderRadius: 5, borderColor:'rgba(255,255,255,0.5)',borderWidth:1,marginVertical:0, marginBottom: 10, backgroundColor:'rgba(0,0,0,0.65)'}}
-                    title='Wyświetl' />
+                    title='Wyświetl'
+                    onPress={ () => this.props.goToDetails()} />
             </Card>
         );
     }

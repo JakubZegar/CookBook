@@ -14,13 +14,13 @@ export default class ProductAcordElem extends Component{
   
   render() {
 
-
     return (
        <View style={styles.container}>
             <TouchableOpacity style={styles.row} onPress={()=>this.toggleExpand()} activeOpacity={1} >
                 <Text style={[styles.title, styles.font]}>{this.props.title}</Text>
                 <Text style={[styles.title, styles.font]}>Ilość: 0</Text>
                 <Icon name={this.state.expanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} size={30} color={'white'} />
+ 
             </TouchableOpacity>
             <View style={styles.parentHr}/>
             {
