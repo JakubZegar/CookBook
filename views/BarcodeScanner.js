@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, Button, ImageBackground, StatusBar } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 export default function App() {
@@ -27,6 +27,7 @@ export default function App() {
 
   return (
     <ImageBackground source={require('../assets/bg1.jpg')} style={{width: '100%', height: '105%'}}>
+        <StatusBar backgroundColor="black" barStyle={'light-content'} />
         <View
         style={{
             flex: 1,
