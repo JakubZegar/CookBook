@@ -14,7 +14,7 @@ export default class RecepieCard extends Component {
                 <Text style={styles.cardTitle}>
                     {this.props.description}
                 </Text>
-                <Button icon={<Icon name='code' color='#ffffff' />} 
+                <Button icon={<Icon name='restaurant' color='#ffffff' />} 
                     buttonStyle={{ borderRadius: 5, borderColor:'rgba(255,255,255,0.5)',borderWidth:1,marginVertical:0, marginBottom: 10, backgroundColor:'rgba(0,0,0,0.65)'}}
                     title='Wyświetl' />
             </Card>

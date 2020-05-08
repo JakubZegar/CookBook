@@ -15,14 +15,14 @@ export default function App() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    alert(data);
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Zezwól na dostęp do kamery</Text>;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>Brak dostępu do kamery</Text>;
   }
 
   return (
@@ -41,7 +41,7 @@ export default function App() {
                 style={StyleSheet.absoluteFillObject}
             />
 
-            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+            {scanned && <Button title={'Skanuj ponownie'} onPress={() => setScanned(false)} />}
         </View>
     </ImageBackground>
   );
