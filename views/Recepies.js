@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
       },
       recepiesContainer:{ 
         display:"flex",
-
+        alignItems:"center",
+        justifyContent:"center",
         flex:1,
     },
   });
