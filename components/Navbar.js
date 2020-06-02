@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { createBottomTabNabigation, createAppContainer } from 'react-navigation';
+import { View } from 'react-native';
+import { createAppContainer } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { Icon } from 'react-native-elements';
 
@@ -8,6 +8,7 @@ import Home from '../views/Home';
 import Products from '../views/Products';
 import Camera from '../views/BarcodeScanner';
 import Recepies from '../views/Recepies';
+
 
 
 const TabNavigator = createMaterialBottomTabNavigator(

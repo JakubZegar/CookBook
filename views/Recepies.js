@@ -2,26 +2,43 @@ import React,{Component} from 'react';
 import {View,Text,StyleSheet , ImageBackground, StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import RecepieCard from '../components/RecepieCard'
 import RecepieDetails from '../components/RecepieDetails'
-
 export default class Recepies extends Component {
-
     constructor(props) {
         super(props);
         this.state = { 
           data: props.data,
           showExact:false,
           recepieId:null,
+
+          api:"https://cookbook-serv.herokuapp.com/api/",
+          recepies:null,
+          isLoaded:false,
         }
         this.goToDetails = this.goToDetails.bind(this)
         this.goBackToRecepieList = this.goBackToRecepieList.bind(this)
     }
 
+
+    componentDidMount(){
+        if(this.state.recepies == null){
+            fetch(this.state.api + 'recepies')
+            .then( res => res.json())
+            .then(json => {
+              this.setState({
+                recepies:json,
+                isLoaded:true,
+              })
+            })
+        }
+    }
     
   goToDetails(id) {
+      
     this.setState({
-        showExact:true,
         recepieId:id,
+        showExact:true,
     })
+    
   }
 
   goBackToRecepieList(){
@@ -38,20 +55,21 @@ export default class Recepies extends Component {
                 <SafeAreaView style={styles.container}>
                     <ScrollView style={styles.scrollView}>
                         {
-                            !this.state.showExact &&
+                            !this.state.showExact && this.state.isLoaded &&
                             <View style={styles.recepiesContainer}>
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)} />   
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)}/>        
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)}/>              
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)}/>
+                                {
+
+                                    this.state.recepies.map( recepie => (
+                                            <RecepieCard name={recepie.name} 
+                                            image={{uri: recepie.image}} 
+                                            description={'To jest przykładowy przepis'} 
+                                            id={recepie.recepieId} 
+                                            goToDetails = {()=>this.goToDetails(recepie.recepieId)} />   
+                                           
+                                        )
+                                    )
+                                }
+    
                             </View>
                         }
 
@@ -59,8 +77,7 @@ export default class Recepies extends Component {
                             this.state.showExact &&
                             <View style={styles.recepiesContainer}>
                                 <RecepieDetails name={"Przepis"} 
-                                    image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                    description={'To jest przykładowy przepis'} id={0}
+                                    recepieId={this.state.recepieId}
                                     goBackToRecepieList = { () => this.goBackToRecepieList()  }></RecepieDetails>
                             </View>
                         } 
