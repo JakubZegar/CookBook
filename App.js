@@ -1,9 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, StatusBar } from 'react-native';
-
-
 import NavBar from './components/Navbar';
-
 
 export default function App() {
 

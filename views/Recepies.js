@@ -14,13 +14,15 @@ export default class Recepies extends Component {
           recepies:null,
           isLoaded:false,
         }
+        this._isMounted = false;
         this.goToDetails = this.goToDetails.bind(this)
         this.goBackToRecepieList = this.goBackToRecepieList.bind(this)
     }
 
 
     componentDidMount(){
-        if(this.state.recepies == null){
+        this._isMounted = true;
+        if(this._isMounted && this.state.recepies == null){
             fetch(this.state.api + 'recepies')
             .then( res => res.json())
             .then(json => {
@@ -31,6 +33,9 @@ export default class Recepies extends Component {
             })
         }
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+     }
     
   goToDetails(id) {
       
@@ -58,14 +63,11 @@ export default class Recepies extends Component {
                             !this.state.showExact && this.state.isLoaded &&
                             <View style={styles.recepiesContainer}>
                                 {
-
                                     this.state.recepies.map( recepie => (
                                             <RecepieCard name={recepie.name} 
                                             image={{uri: recepie.image}} 
-                                            description={'To jest przykładowy przepis'} 
                                             id={recepie.recepieId} 
                                             goToDetails = {()=>this.goToDetails(recepie.recepieId)} />   
-                                           
                                         )
                                     )
                                 }
