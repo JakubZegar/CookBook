@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet, ImageBackground, StatusBar, AsyncStorage} from 'react-native';
+import {View,Text,StyleSheet, ImageBackground, StatusBar, AsyncStorage, Dimensions} from 'react-native';
 import ProductAcordElem from '../components/ProductAcordElem'
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
@@ -74,7 +74,7 @@ export default class Products extends Component {
 
     render() {
         return(
-            <ImageBackground source={require('../assets/bg1.jpg')} style={{width: '100%', height: '105%', }}>
+            <ImageBackground source={require('../assets/bg1.jpg')} style={styles.bgstyle}>
                 <StatusBar backgroundColor="black" barStyle={'light-content'} />
                 <ScrollView style={styles.scroll}>
                     <View style={styles.productContainer}>
@@ -104,6 +104,13 @@ const styles = StyleSheet.create({
         margin:20,
         backgroundColor:"transparent",
     },
+    bgstyle:{    
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
+  },
     scroll:{
         marginBottom:32,
     },

@@ -15,7 +15,6 @@ export default class RecepieCard extends Component {
           recepieDetails:null,
           recepieProducts:null,
           recepieProductsDetails:[],
-          everythingIsLoaded:false,
           isDetailsLoaded:false,
           isProductLoaded:false,
           isProductDetailsLoaded:false,

@@ -111,15 +111,17 @@ export default class BarcodeScanner extends Component{
     }
     if(CameraPermissionGranted === true){
       return(
-        <ImageBackground source={require('../assets/bg1.jpg')} style={{width: '100%', height: '105%'}}>
+        <ImageBackground source={require('../assets/bg1.jpg')} style={styles.bgstyle}>
             <StatusBar backgroundColor="black" barStyle={'light-content'} />
             <View
             style={{
                 flex: 1,
                 flexDirection: 'column',
-                justifyContent: 'flex-end',
-                height:'70%',
+                justifyContent: 'center',
+                alignItems:"center",
+                height:'50%',
                 margin:'8%',
+                marginBottom:'32%',
             }}>
               {
                 !this.state.scanned && <BarCodeScanner onBarCodeScanned={ this.barCodeScanned }  style={StyleSheet.absoluteFillObject}/>
@@ -140,26 +142,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  bgstyle:{    
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
 });
-
-  // return (
-  //   <ImageBackground source={require('../assets/bg1.jpg')} style={{width: '100%', height: '105%'}}>
-  //       <StatusBar backgroundColor="black" barStyle={'light-content'} />
-  //       <View
-  //       style={{
-  //           flex: 1,
-  //           flexDirection: 'column',
-  //           justifyContent: 'flex-end',
-  //           height:'70%',
-  //           margin:'8%',
-  //       }}>
-  //           <BarCodeScanner
-  //               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-  //               style={StyleSheet.absoluteFillObject}
-  //           />
-
-  //           {scanned && <Button title={'Skanuj ponownie'} onPress={() => setScanned(false)} />}
-  //       </View>
-  //   </ImageBackground>
-  // );
-
