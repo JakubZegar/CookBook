@@ -2,7 +2,8 @@ import React,{Component} from 'react';
 import {View,Text,StyleSheet, ImageBackground, StatusBar, AsyncStorage, Dimensions} from 'react-native';
 import ProductAcordElem from '../components/ProductAcordElem'
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button } from 'react-native-paper';
+import { Card, Button, Icon } from 'react-native-elements'
+import AddProduct from '../components/AddProduct';
 
 export default class Products extends Component {
 
@@ -11,16 +12,25 @@ export default class Products extends Component {
         this.state = { 
             yourProducts:[],
             isProductsLoaded:false,
+
+            addNewProductForm:false,
         }
 
         this.addProduct = this.addProduct.bind(this)
         this.substractProduct = this.substractProduct.bind(this)
+        this.switchScreenToAddingForm = this.switchScreenToAddingForm.bind(this)
     }
 
     componentDidMount(){
         if( !this.state.isProductsLoaded){
             this._retrieveData();
         }
+    }
+
+    switchScreenToAddingForm(){
+      this.setState({
+        addNewProductForm:!this.state.addNewProductForm
+      })
     }
 
     refresh(){
@@ -76,23 +86,37 @@ export default class Products extends Component {
         return(
             <ImageBackground source={require('../assets/bg1.jpg')} style={styles.bgstyle}>
                 <StatusBar backgroundColor="black" barStyle={'light-content'} />
-                <ScrollView style={styles.scroll}>
-                    <View style={styles.productContainer}>
-                        {
-                            this.state.isProductsLoaded && this.state.yourProducts.map( (product, index) => (
-                                <ProductAcordElem key={index} index={index} title={product.name} amount={product.amount}
-                                                 unit={product.unit} addProduct={this.addProduct} 
-                                                 substractProduct={this.substractProduct} />
-                            ))
-                        }
-                    </View>
-                    <Button onPress={ () => this.refresh()}>Odśwież </Button>
-                </ScrollView>
+                {  !this.state.addNewProductForm &&          
+                  <ScrollView style={styles.scroll}>
+                      <View style={styles.productContainer}>
+                          {
+                              this.state.isProductsLoaded && this.state.yourProducts.map( (product, index) => (
+                                  <ProductAcordElem key={index} index={index} title={product.name} amount={product.amount}
+                                                  unit={product.unit} addProduct={this.addProduct} 
+                                                  substractProduct={this.substractProduct} />
+                              ))
+                          }
+                      </View>
+                      <Button icon={<Icon name='restaurant' color='#ffffff' />} 
+                      buttonStyle={styles.refresh}
+                      title='Odśwież'
+                      onPress={ () => this.refresh()} />
+
+                      <Button icon={<Icon name='restaurant' color='#ffffff' />} 
+                        buttonStyle={styles.refresh}
+                        title='Dodaj nowy produkt'
+                        onPress={ () => this.switchScreenToAddingForm()} />
+                  </ScrollView>
+                }
+
+                {
+                  this.state.addNewProductForm &&
+                  <AddProduct barcode={""} title={"Dodaj nowy produkt do bazy"} goBack={() => this.switchScreenToAddingForm()}></AddProduct>
+                }
             </ImageBackground>
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     productContainer: {
@@ -116,5 +140,13 @@ const styles = StyleSheet.create({
     },
     textStyle:{
         color:"#ffffff"
+    },
+    refresh:{
+      borderRadius: 5, 
+      borderColor:'rgba(255,255,255,0.5)',
+      borderWidth:1,
+      marginHorizontal:20, 
+      marginBottom: 10, 
+      backgroundColor:'rgba(0,0,0,0.7)'
     },
   });

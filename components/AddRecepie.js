@@ -17,7 +17,7 @@ export default class AddRecpie extends Component {
             areProductsLoaded:false,
             expanded:false,
             checked:[],
-            selectedItems:[]
+            amountOfSelected:[],
         }
      }
 
@@ -33,6 +33,41 @@ export default class AddRecpie extends Component {
             })
         }
      }
+
+     _postData = async () => {
+        const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/recepies/create', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body:JSON.stringify(this.state.newRecepie)
+        });
+        const content = await rawResponse.json().then(
+
+            this.state.checked.forEach(product => {
+                let payload ={
+                    recepieId:eval(this.props.lastIndex + 1),
+                    productId:eval(product + 1),
+                    amount:this.state.amountOfSelected[product]
+                }
+                this._postProducts(payload)
+            })
+        ).then(this.props.finishAddingRecepies())
+    }
+
+    _postProducts = async (payload) => {
+        const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/recepieProducts/create', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(payload)
+          });
+          const content = await rawResponse.json()
+    }
+    
 
     toggleExpand = () => {
         this.setState({expanded : !this.state.expanded})
@@ -51,19 +86,11 @@ export default class AddRecpie extends Component {
     }
 
     getData(){
-        let a = ""
-        //alert(JSON.stringify(this.state.newRecepie))
-        this.state.checked.forEach(element => {
-            a+= " "
-            a+= element
-            
-        });
-        alert(a)
-        //alert(JSON.stringify(this.state.selectedItems))
+        this._postData()
     }
     
     isItemChecked(index) {
-        return this.state.checked.indexOf(index) > -1
+        return this.state.checked.indexOf(index) > -1            
     }
 
     manageToggle = (evt, index) => {
@@ -75,6 +102,12 @@ export default class AddRecpie extends Component {
           this.setState({
             checked: [...this.state.checked, index]
           })
+        }
+    }
+
+    setAmount = (index, value) => {
+        if(value > 0){
+            this.state.amountOfSelected[index] = eval(value/this.state.allPrducts[index].amount);
         }
     }
 
@@ -112,28 +145,31 @@ export default class AddRecpie extends Component {
             </TouchableOpacity>
             {
                 
-                this.state.expanded &&
+                this.state.expanded && this.state.amountOfSelected.push(0) &&
                 this.state.allPrducts.map( (product, index) =>(
-
                     <ListItem
                         key={index}
                         title={product.name}
-                        subtitle={product.amount +" "+ product.unit}
+                        containerStyle={{backgroundColor:'transparent',  alignSelf:'center' }}
+                        titleStyle={{ color: 'white' }}
+                        subtitleStyle={{ color: 'white' }}
+                        subtitle={product.unit}
                         checkBox={{ checked:this.isItemChecked(index),
-                        onPress:evt => this.manageToggle(evt, index)    }}
+                            onPress:evt => this.manageToggle(evt, index) , checkedColor:'white'   }}
+                        input={{containerStyle:{borderBottomColor:'rgba(255,255,255,0.5)',borderBottomWidth:1,alignSelf:"flex-end"}, 
+                                inputStyle:{color:'white'},
+                                placeholder:"Wpisz ilość",
+                                keyboardType:"numeric",
+                                onChangeText:value => this.setAmount(index, value)
+                            }}
                         bottomDivider
                     />
-                    
                 ))
             }
-            {
-                
-            }
-
                         
             <Button onPress={ () => this.getData()}
                 icon={<Icon name='restaurant' color='#ffffff' />} 
-                buttonStyle={{ borderRadius: 5, borderColor:'rgba(255,255,255,0.5)',borderWidth:1,marginVertical:0, marginBottom: 10, backgroundColor:'rgba(0,0,0,0.65)'}}
+                buttonStyle={{ borderRadius: 5, borderColor:'rgba(255,255,255,0.5)',borderWidth:1,marginVertical:0, marginVertical: 20, backgroundColor:'rgba(0,0,0,0.65)'}}
                 title='Wyślij' >
             </Button>
 
@@ -173,6 +209,10 @@ const styles = StyleSheet.create({
         paddingRight:18,
         alignItems:'center',
         backgroundColor: "rgba(0,0,0,0.7)",
+        marginTop:10,
+        borderRadius: 5,
+        borderColor:'rgba(255,255,255,0.5)',
+        borderWidth:1,
     },
     leftSide:{
         display:"flex",

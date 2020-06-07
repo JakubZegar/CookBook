@@ -85,7 +85,7 @@ export default class RecepieCard extends Component {
             
             this.state.isDetailsLoaded && this.state.isProductDetailsLoaded && this.state.isProductLoaded &&
             <Card title={this.state.recepieDetails.name} image={{uri: this.state.recepieDetails.image}} 
-                containerStyle={{alignItems:"center", justifyContent:"center", width:350, backgroundColor:'rgba(0,0,0,0.7)', 
+                containerStyle={{alignItems:"stretch", justifyContent:"center", width:350, backgroundColor:'rgba(0,0,0,0.7)', 
                                 borderColor:"transparent", borderRadius:15}}
                 titleStyle={{color:"white",}} >
 
@@ -98,8 +98,6 @@ export default class RecepieCard extends Component {
                 <Text style={styles.cardTitle}>
                     Potrzebne składniki:
                 </Text>
-
-                
                 
                 <View style={styles.productsStyle}>
                     {

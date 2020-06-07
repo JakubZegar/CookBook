@@ -24,16 +24,8 @@ export default class Recepies extends Component {
 
     componentDidMount(){
         this._isMounted = true;
-        if(this._isMounted && this.state.recepies == null){
-            fetch(this.state.api + 'recepies')
-            .then( res => res.json())
-            .then(json => {
-              this.setState({
-                recepies:json,
-                isLoaded:true,
-              })
-            })
-        }
+        this._loadData();
+
     }
     componentWillUnmount() {
         this._isMounted = false;
@@ -46,6 +38,19 @@ export default class Recepies extends Component {
     })
   }
 
+  _loadData = async () => {
+    if(this._isMounted && this.state.recepies == null){
+        fetch(this.state.api + 'recepies')
+        .then( res => res.json())
+        .then(json => {
+          this.setState({
+            recepies:json,
+            isLoaded:true,
+          })
+        })
+    }
+  }
+
   goBackToRecepieList(){
     this.setState({
         showExact:false,
@@ -56,7 +61,10 @@ export default class Recepies extends Component {
   finishAddingRecepies(){
       this.setState({
           isAddingRecepies:false,
+          recepies:null,
+          isLoaded:false,
       })
+      this._loadData()
   }
   
     render() {
@@ -104,7 +112,8 @@ export default class Recepies extends Component {
                         {
                             this.state.isAddingRecepies && !this.state.showExact &&
                             <View style={styles.recepiesContainer}>
-                                <AddRecpie finishAddingRecepies={() => this.finishAddingRecepies()}></AddRecpie>
+                                <AddRecpie finishAddingRecepies={() => this.finishAddingRecepies()} 
+                                    lastIndex={this.state.recepies.length}></AddRecpie>
                             </View>
                         }
                     </ScrollView>

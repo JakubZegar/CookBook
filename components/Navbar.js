@@ -4,7 +4,6 @@ import { createAppContainer } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { Icon } from 'react-native-elements';
 
-import Home from '../views/Home';
 import Products from '../views/Products';
 import Camera from '../views/BarcodeScanner';
 import Recepies from '../views/Recepies';
@@ -13,16 +12,16 @@ import Recepies from '../views/Recepies';
 
 const TabNavigator = createMaterialBottomTabNavigator(
     {
-        Home:{
-            screen:Home,
+        Recepies:{
+            screen:Recepies,
             navigationOptions:{
-                tabBarLabel:'Home',
+                tabBarLabel:'Recepies',
                 activeColor:'#ffffff',
                 inactiveColor:'#ffffff',
                 barStyle:{backgroundColor:'rgba(0,0,0,0.15)'},
                 tabBarIcon:()=>(
                     <View>
-                        <Icon name={'home'} size={25} color={'white'}/>
+                        <Icon name={'event-note'} size={25} color={'white'}/>
                     </View>
                 )
             }
@@ -58,20 +57,6 @@ const TabNavigator = createMaterialBottomTabNavigator(
             }
         },
 
-        Recepies:{
-            screen:Recepies,
-            navigationOptions:{
-                tabBarLabel:'Recepies',
-                activeColor:'#ffffff',
-                inactiveColor:'#ffffff',
-                barStyle:{backgroundColor:'rgba(0,0,0,0.15)'},
-                tabBarIcon:()=>(
-                    <View>
-                        <Icon name={'event-note'} size={25} color={'white'}/>
-                    </View>
-                )
-            }
-        },
     }
 );
 
