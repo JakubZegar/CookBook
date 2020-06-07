@@ -1,27 +1,54 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet , ImageBackground, StatusBar, SafeAreaView, ScrollView} from 'react-native';
+import {View,StyleSheet , ImageBackground, StatusBar, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { Button, Icon } from 'react-native-elements'
 import RecepieCard from '../components/RecepieCard'
 import RecepieDetails from '../components/RecepieDetails'
-
+import AddRecpie from '../components/AddRecepie'
 export default class Recepies extends Component {
-
     constructor(props) {
         super(props);
         this.state = { 
           data: props.data,
           showExact:false,
           recepieId:null,
+          api:"https://cookbook-serv.herokuapp.com/api/",
+          recepies:null,
+          isLoaded:false,
+          isAddingRecepies:false,
         }
+        this._isMounted = false;
         this.goToDetails = this.goToDetails.bind(this)
         this.goBackToRecepieList = this.goBackToRecepieList.bind(this)
+        this.finishAddingRecepies = this.finishAddingRecepies.bind(this)
     }
 
+    componentDidMount(){
+        this._isMounted = true;
+        this._loadData();
+
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+     }
     
   goToDetails(id) {
     this.setState({
-        showExact:true,
         recepieId:id,
+        showExact:true,
     })
+  }
+
+  _loadData = async () => {
+    if(this._isMounted && this.state.recepies == null){
+        fetch(this.state.api + 'recepies')
+        .then( res => res.json())
+        .then(json => {
+          this.setState({
+            recepies:json,
+            isLoaded:true,
+          })
+        })
+    }
   }
 
   goBackToRecepieList(){
@@ -30,40 +57,65 @@ export default class Recepies extends Component {
         recepieId:null,
     })
   }
+
+  finishAddingRecepies(){
+      this.setState({
+          isAddingRecepies:false,
+          recepies:null,
+          isLoaded:false,
+      })
+      this._loadData()
+  }
   
     render() {
         return(
-            <ImageBackground source={require('../assets/bg1.jpg')} style={{width: '100%', height: '105%'}}>
+            <ImageBackground source={require('../assets/bg1.jpg')} style={styles.bgstyle}>
                 <StatusBar backgroundColor="black" barStyle={'light-content'} />
                 <SafeAreaView style={styles.container}>
                     <ScrollView style={styles.scrollView}>
                         {
-                            !this.state.showExact &&
+                            !this.state.isAddingRecepies &&
                             <View style={styles.recepiesContainer}>
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)} />   
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)}/>        
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)}/>              
-                                <RecepieCard name={"Przepis"} 
-                                            image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                            description={'To jest przykładowy przepis'} id={0} goToDetails = {()=>this.goToDetails(0)}/>
+                                <Button icon={<Icon name='restaurant-menu' color='#ffffff' />} 
+                                buttonStyle={styles.addRecepieButton}
+                                title='Dodaj nowy przepis'
+                                onPress={()=>this.setState({isAddingRecepies:true})} />
+                            </View>                                
+                        }
+
+                        {
+                            !this.state.showExact && this.state.isLoaded && !this.state.isAddingRecepies &&
+                            <View style={styles.recepiesContainer}>
+                                {
+                                    this.state.recepies.map( recepie => (
+                                            <RecepieCard name={recepie.name}
+                                            key={recepie.recepieId} 
+                                            image={{uri: recepie.image}} 
+                                            id={recepie.recepieId} 
+                                            goToDetails = {()=>this.goToDetails(recepie.recepieId)} />   
+                                        )
+                                    )
+                                }
+    
                             </View>
                         }
 
                         {
-                            this.state.showExact &&
+                            this.state.showExact && !this.state.isAddingRecepies &&
                             <View style={styles.recepiesContainer}>
                                 <RecepieDetails name={"Przepis"} 
-                                    image={{uri: 'http://t0.gstatic.com/images?q=tbn:ANd9GcTXV_EQmNUSW6GobcuU_BQUVkBE1_FDAhdOzmELWH6nwOYCBo52sOevLZVBD1MHgTRoIBMxJ6bqsIWz4qSRE6A'}} 
-                                    description={'To jest przykładowy przepis'} id={0}
+                                    recepieId={this.state.recepieId}
                                     goBackToRecepieList = { () => this.goBackToRecepieList()  }></RecepieDetails>
                             </View>
                         } 
+
+                        {
+                            this.state.isAddingRecepies && !this.state.showExact &&
+                            <View style={styles.recepiesContainer}>
+                                <AddRecpie finishAddingRecepies={() => this.finishAddingRecepies()} 
+                                    lastIndex={this.state.recepies.length}></AddRecpie>
+                            </View>
+                        }
                     </ScrollView>
                 </SafeAreaView>
             </ImageBackground>
@@ -72,10 +124,18 @@ export default class Recepies extends Component {
 }
 
 const styles = StyleSheet.create({
+    bgstyle:{    
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+    },
     container: {
         display:"flex",
         flex: 1,
         alignItems: 'stretch',
+        marginBottom:"6.7%"
 
     },
     textStyle:{
@@ -90,12 +150,26 @@ const styles = StyleSheet.create({
         display:"flex",
         color:"white",
         flex:1,
-        fontSize: 42,
+        fontWeight:"bold",
+        fontSize: 18,
       },
       recepiesContainer:{ 
         display:"flex",
         alignItems:"center",
         justifyContent:"center",
         flex:1,
-    },
+        },
+    addRecepieButton:{
+        alignItems:"center",
+        
+        width:350,
+        height:50,
+        borderColor:'rgba(255,255,255,0.5)',
+        borderWidth:1,
+        marginVertical:0,
+        marginBottom: 10,
+        backgroundColor:'rgba(0,0,0,0.7)',
+        borderRadius:15,
+        marginTop:20
+    }
   });
