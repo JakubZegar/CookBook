@@ -1,4 +1,3 @@
-
 import React,{Component} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, Text, View,Switch} from 'react-native';
 import { Card, Button, Icon } from 'react-native-elements'
@@ -15,7 +14,6 @@ export default class AddProduct extends Component{
                 amount:"",
                 unit:""
             },
-
         }
     }
 
@@ -24,17 +22,21 @@ export default class AddProduct extends Component{
     }
 
     _postData = async () => {
-        const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/products/create', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body:JSON.stringify(this.state.newProduct)
-        });
-        await rawResponse.json().then(
-            this.props.goBack()
-        )
+        try{
+            const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/products/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(this.state.newProduct)
+            });
+            await rawResponse.json().then(
+                this.props.goBack()
+            )
+        } catch (error) {
+            
+        }
     }
 
     setName(value){
@@ -88,11 +90,9 @@ export default class AddProduct extends Component{
                 rightIcon={{ type: 'font-awesome', name: 'chain-broken', color:'white' }}
                 onChangeText={value => this.setUnit(value)}/>
 
-
                 <Button buttonStyle={styles.button} title={'Dodaj produkt'} onPress={() => this._postData()} />
 
-
-                <Button buttonStyle={styles.button} title={'Skanuj ponownie'} onPress={() => this.props.goBack()} />
+                <Button buttonStyle={styles.button} title={this.props.returnMessage} onPress={() => this.props.goBack()} />
             </Card>
         )
     }    

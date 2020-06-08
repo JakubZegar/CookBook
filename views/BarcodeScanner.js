@@ -186,7 +186,12 @@ export default class BarcodeScanner extends Component{
               {
                 this.state.scanned && this.state.showAddingForm &&
                 <View>
-                  <AddProduct barcode={this.state.barcode} title={"Nie udało się znaleźć produktu, ale możesz go dodać"} goBack={() => this.backToScan()}></AddProduct>
+                  <AddProduct 
+                    barcode={this.state.barcode} 
+                    title={"Nie udało się znaleźć produktu, ale możesz go dodać"} 
+                    goBack={() => this.backToScan()} 
+                    returnMessage={"Skanuj ponownie"}>
+                  </AddProduct>
                 </View>
               } 
             </View>

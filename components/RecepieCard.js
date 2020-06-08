@@ -7,9 +7,9 @@ export default class RecepieCard extends Component {
 
     render() {
         return(
-            <Card title={this.props.name} image={this.props.image} 
+            <Card title={this.props.name} image={{uri:this.props.image}} 
                 containerStyle={{alignItems:"center", justifyContent:"center", width:350, backgroundColor:'rgba(0,0,0,0.7)', borderColor:"transparent", borderRadius:15}}
-                imageStyle={{width:300, borderRadius:10, borderWidth:1, borderColor:'rgba(255,255,255,0.5)'}}
+                imageStyle={{width:300, borderWidth:1, borderColor:'rgba(255,255,255,0.5)'}}
                 titleStyle={{color:"white",}}
             >
                 <Text style={styles.cardTitle}>
