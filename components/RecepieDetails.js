@@ -84,7 +84,7 @@ export default class RecepieCard extends Component {
         return(
             
             this.state.isDetailsLoaded && this.state.isProductDetailsLoaded && this.state.isProductLoaded &&
-            <Card title={this.state.recepieDetails.name} image={{uri: this.state.recepieDetails.image}} 
+            <Card title={this.state.recepieDetails.name} image={{uri: this.state.recepieDetails.image}} key={this.state.recepieDetails.recepieId}
                 containerStyle={{alignItems:"stretch", justifyContent:"center", width:350, backgroundColor:'rgba(0,0,0,0.7)', 
                                 borderColor:"transparent", borderRadius:15}}
                 titleStyle={{color:"white",}} >
@@ -102,7 +102,7 @@ export default class RecepieCard extends Component {
                 <View style={styles.productsStyle}>
                     {
                         this.state.isProductDetailsLoaded && this.state.recepieProductsDetails.map( (product, index) => (
-                            <View style={styles.singleProductRow}>
+                            <View style={styles.singleProductRow} key={index}>
                                 <Text style={styles.cardTitle}>
                                     {product.name}
                                 </Text>

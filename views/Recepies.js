@@ -4,6 +4,7 @@ import { Button, Icon } from 'react-native-elements'
 import RecepieCard from '../components/RecepieCard'
 import RecepieDetails from '../components/RecepieDetails'
 import AddRecpie from '../components/AddRecepie'
+import FilterRecepies from '../components/FilterRecepies';
 export default class Recepies extends Component {
     constructor(props) {
         super(props);
@@ -15,11 +16,14 @@ export default class Recepies extends Component {
           recepies:null,
           isLoaded:false,
           isAddingRecepies:false,
+
+          showingAvalibleRecepies:false,
         }
         this._isMounted = false;
         this.goToDetails = this.goToDetails.bind(this)
         this.goBackToRecepieList = this.goBackToRecepieList.bind(this)
         this.finishAddingRecepies = this.finishAddingRecepies.bind(this)
+        this.showAvalible = this.showAvalible.bind(this)
     }
 
     componentDidMount(){
@@ -30,26 +34,34 @@ export default class Recepies extends Component {
     componentWillUnmount() {
         this._isMounted = false;
      }
-    
-  goToDetails(id) {
-    this.setState({
-        recepieId:id,
-        showExact:true,
-    })
-  }
 
-  _loadData = async () => {
-    if(this._isMounted && this.state.recepies == null){
-        fetch(this.state.api + 'recepies')
-        .then( res => res.json())
-        .then(json => {
-          this.setState({
-            recepies:json,
-            isLoaded:true,
-          })
+    showAvalible( avalibleRecepies ) {
+
+        this.setState({
+            recepies:avalibleRecepies,
+            showingAvalibleRecepies:true,
         })
     }
-  }
+    
+    goToDetails(id) {
+        this.setState({
+            recepieId:id,
+            showExact:true,
+        })
+    }
+
+    _loadData = async () => {
+
+            fetch(this.state.api + 'recepies')
+            .then( res => res.json())
+            .then(json => {
+            this.setState({
+                recepies:json,
+                isLoaded:true,
+                showingAvalibleRecepies:false,
+            })
+            })
+    }
 
   goBackToRecepieList(){
     this.setState({
@@ -66,6 +78,11 @@ export default class Recepies extends Component {
       })
       this._loadData()
   }
+
+  showAll(){
+
+      this._loadData()
+  }
   
     render() {
         return(
@@ -74,12 +91,25 @@ export default class Recepies extends Component {
                 <SafeAreaView style={styles.container}>
                     <ScrollView style={styles.scrollView}>
                         {
-                            !this.state.isAddingRecepies &&
+                            !this.state.isAddingRecepies && this.state.isLoaded &&
                             <View style={styles.recepiesContainer}>
                                 <Button icon={<Icon name='restaurant-menu' color='#ffffff' />} 
                                 buttonStyle={styles.addRecepieButton}
                                 title='Dodaj nowy przepis'
                                 onPress={()=>this.setState({isAddingRecepies:true})} />
+
+                                {
+                                    !this.state.showingAvalibleRecepies && !this.state.showExact &&
+                                    <FilterRecepies allRecepies={this.state.recepies} showAvalible={(avalibleRecepies)=>this.showAvalible(avalibleRecepies)}/>
+                                }
+                                {
+                                    this.state.showingAvalibleRecepies && 
+                                    <Button icon={<Icon name='restaurant-menu' color='#ffffff' />} 
+                                    buttonStyle={styles.addRecepieButton}
+                                    title='Pokaż wszystkie przepisy'
+                                    onPress={()=> this.showAll() } />
+                                }
+                                
                             </View>                                
                         }
 
@@ -87,10 +117,10 @@ export default class Recepies extends Component {
                             !this.state.showExact && this.state.isLoaded && !this.state.isAddingRecepies &&
                             <View style={styles.recepiesContainer}>
                                 {
-                                    this.state.recepies.map( recepie => (
+                                    this.state.recepies.map( (recepie,index) => (
                                             <RecepieCard name={recepie.name}
-                                            key={recepie.recepieId} 
-                                            image={{uri: recepie.image}} 
+                                            key={index+1} 
+                                            image={recepie.image} 
                                             id={recepie.recepieId} 
                                             goToDetails = {()=>this.goToDetails(recepie.recepieId)} />   
                                         )
@@ -103,7 +133,7 @@ export default class Recepies extends Component {
                         {
                             this.state.showExact && !this.state.isAddingRecepies &&
                             <View style={styles.recepiesContainer}>
-                                <RecepieDetails name={"Przepis"} 
+                                <RecepieDetails
                                     recepieId={this.state.recepieId}
                                     goBackToRecepieList = { () => this.goBackToRecepieList()  }></RecepieDetails>
                             </View>
@@ -158,15 +188,13 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         flex:1,
-        },
+    },
     addRecepieButton:{
         alignItems:"center",
-        
         width:350,
         height:50,
         borderColor:'rgba(255,255,255,0.5)',
         borderWidth:1,
-        marginVertical:0,
         marginBottom: 10,
         backgroundColor:'rgba(0,0,0,0.7)',
         borderRadius:15,

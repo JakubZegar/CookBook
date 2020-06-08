@@ -35,37 +35,45 @@ export default class AddRecpie extends Component {
      }
 
      _postData = async () => {
-        const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/recepies/create', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body:JSON.stringify(this.state.newRecepie)
-        });
-        const content = await rawResponse.json().then(
+         try{
+            const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/recepies/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(this.state.newRecepie)
+            });
+            const content = await rawResponse.json().then(
 
-            this.state.checked.forEach(product => {
-                let payload ={
-                    recepieId:eval(this.props.lastIndex + 1),
-                    productId:eval(product + 1),
-                    amount:this.state.amountOfSelected[product]
-                }
-                this._postProducts(payload)
-            })
-        ).then(this.props.finishAddingRecepies())
+                this.state.checked.forEach(product => {
+                    let payload ={
+                        recepieId:eval(this.props.lastIndex + 1),
+                        productId:eval(product + 1),
+                        amount:this.state.amountOfSelected[product]
+                    }
+                    this._postProducts(payload)
+                })
+            ).then(this.props.finishAddingRecepies())
+        } catch(error){
+
+        }
     }
 
     _postProducts = async (payload) => {
-        const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/recepieProducts/create', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body:JSON.stringify(payload)
-          });
-          const content = await rawResponse.json()
+        try{
+            const rawResponse = await fetch('https://cookbook-serv.herokuapp.com/api/recepieProducts/create', {
+                method: 'POST',
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body:JSON.stringify(payload)
+            });
+            const content = await rawResponse.json()
+        }catch(error){
+
+        }
     }
     
 
@@ -171,6 +179,12 @@ export default class AddRecpie extends Component {
                 icon={<Icon name='restaurant' color='#ffffff' />} 
                 buttonStyle={{ borderRadius: 5, borderColor:'rgba(255,255,255,0.5)',borderWidth:1,marginVertical:0, marginVertical: 20, backgroundColor:'rgba(0,0,0,0.65)'}}
                 title='Wyślij' >
+            </Button>
+
+            <Button onPress={ () => this.props.finishAddingRecepies()}
+                icon={<Icon name='restaurant' color='#ffffff' />} 
+                buttonStyle={{ borderRadius: 5, borderColor:'rgba(255,255,255,0.5)',borderWidth:1,marginVertical:0, marginVertical: 20, backgroundColor:'rgba(0,0,0,0.65)'}}
+                title='Powrót' >
             </Button>
 
             </Card>                    

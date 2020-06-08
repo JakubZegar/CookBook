@@ -65,7 +65,6 @@ export default class Products extends Component {
       addProduct(index){
         const newProducts = this.state.yourProducts.slice()
         newProducts[index].amount += 1
-
           this.setState({
               yourProducts:newProducts
           })
@@ -111,7 +110,10 @@ export default class Products extends Component {
 
                 {
                   this.state.addNewProductForm &&
-                  <AddProduct barcode={""} title={"Dodaj nowy produkt do bazy"} goBack={() => this.switchScreenToAddingForm()}></AddProduct>
+                  <AddProduct barcode={""} 
+                    title={"Dodaj nowy produkt do bazy"} 
+                    goBack={() => this.switchScreenToAddingForm()}
+                    returnMessage={"Wróć do listy"}></AddProduct>
                 }
             </ImageBackground>
         );
